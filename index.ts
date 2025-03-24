@@ -46,6 +46,16 @@ fastify.delete('/delete-post/:postId', async (request:FastifyRequest, reply:Fast
     reply.code(201).send({response: 'Post apagado com sucesso'})
 }) 
 
+fastify.get('/post/:postId', async (request:FastifyRequest, reply:FastifyReply) => {
+    const {postId} = request.params as any
+    try {
+        const postToRetrieve = await Post.findOne({id: postId})
+        reply.code(200).send({post: postToRetrieve})
+    } catch (error) {
+        return reply.code(400).send({responde: `Erro ao recuperar o post: ${error}`})
+    }
+})
+
 try {
   await fastify.listen({ port: 3500 })
 } catch (err) {
