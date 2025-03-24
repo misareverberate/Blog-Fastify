@@ -57,6 +57,18 @@ fastify.get('/post/:postId', async (request:FastifyRequest, reply:FastifyReply) 
     }
 })
 
+fastify.get('/update-post/:postId', async (request:FastifyRequest, reply:FastifyReply) => {
+    const {postId} = request.query as any
+    const postData:Post = request.body as Post
+    postData.id = postData.title.replaceAll(' - ', '-').replaceAll(' ', '-')
+    try {
+        await Post.updateOne({id: postId}, postData)
+        reply.code(200).send({response: 'Post atualizado com sucesso'})
+    } catch (error) {
+        return reply.code(400).send({responde: `Erro ao atualizar o post: ${error}`})
+    }
+})
+
 fastify.get('/posts/', async (request:FastifyRequest, reply:FastifyReply) => {
     try {
         let tags: string[] = [];
