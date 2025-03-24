@@ -17,10 +17,10 @@ Este é um projeto simples de backend desenvolvido com TypeScript, Fastify e Mon
   
 ## 🛠️ Tecnologias empregadas
 
-Node.js: Ambiente de execução para JavaScript no servidor.
+**Node.js**: Ambiente de execução para JavaScript no servidor.
 
-Fastify: Framework web rápido e leve para construir APIs.
+**Fastify**: Framework web rápido e leve para construir APIs.
 
-TypeScript: Superset de JavaScript que adiciona tipagem estática.
+**TypeScript**: Linguagem utilizada.
 
-MongoDB com Mongoose: Banco de dados NoSQL e ORM para modelagem de dados.
+**MongoDB** & **Mongoose**: Banco de dados NoSQL e ORM para modelagem de dados.
