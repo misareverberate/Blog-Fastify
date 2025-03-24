@@ -49,7 +49,8 @@ fastify.delete('/delete-post/:postId', async (request:FastifyRequest, reply:Fast
 fastify.get('/post/:postId', async (request:FastifyRequest, reply:FastifyReply) => {
     const {postId} = request.params as any
     try {
-        const postToRetrieve = await Post.findOne({id: postId})
+        const postToRetrieve:Post|null = await Post.findOne({id: postId})
+        if(!postToRetrieve) throw new Error('Post perdido no meio do caminho (-_-)')
         reply.code(200).send({post: postToRetrieve})
     } catch (error) {
         return reply.code(400).send({responde: `Erro ao recuperar o post: ${error}`})
