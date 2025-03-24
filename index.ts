@@ -57,6 +57,21 @@ fastify.get('/post/:postId', async (request:FastifyRequest, reply:FastifyReply) 
     }
 })
 
+fastify.get('/posts/', async (request:FastifyRequest, reply:FastifyReply) => {
+    try {
+        let tags: string[] = [];
+        if ((request.query as any).tag) {
+            tags = Array.isArray((request.query as any).tag) ? (request.query as any).tag : [(request.query as any).tag];
+        }
+        const filter = tags.length ? { post_tags: { $in: tags } } : {};
+        const postsToRetrieve: Post[] = await Post.find(filter);
+        if (!postsToRetrieve) throw new Error('Post perdido no meio do caminho (-_-)');
+        return reply.code(200).send({ response: 'Posts recuperados com sucesso', post: postsToRetrieve });
+    } catch (error) {
+        return reply.code(400).send({ response: `Erro ao recuperar o post: ${error}` });
+    }
+})
+
 try {
   await fastify.listen({ port: 3500 })
 } catch (err) {
