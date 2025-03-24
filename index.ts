@@ -35,7 +35,7 @@ fastify.post('/create-post', async (request:FastifyRequest, reply:FastifyReply) 
     reply.code(201).send({response: 'Post Criado com Sucesso', data: postData})
 }) 
 
-fastify.delete('/delete-post/:postId', async (request:FastifyRequest, reply:FastifyReply) => {
+fastify.delete('/delete-post/', async (request:FastifyRequest, reply:FastifyReply) => {
     const {postId} = request.query as any
     console.log(postId)
     try {
@@ -57,13 +57,17 @@ fastify.get('/post/:postId', async (request:FastifyRequest, reply:FastifyReply) 
     }
 })
 
-fastify.get('/update-post/:postId', async (request:FastifyRequest, reply:FastifyReply) => {
+fastify.put('/update-post/', async (request:FastifyRequest, reply:FastifyReply) => {
     const {postId} = request.query as any
     const postData:Post = request.body as Post
     postData.id = postData.title.replaceAll(' - ', '-').replaceAll(' ', '-')
+    if (typeof postData.post_tags === 'string') {
+        postData.post_tags = postData.post_tags.split(',')
+    }
     try {
+        if(!(await Post.findOne({id: postId}))) return reply.code(400).send({response: 'O Post não existe (~_~)'})
         await Post.updateOne({id: postId}, postData)
-        reply.code(200).send({response: 'Post atualizado com sucesso'})
+        reply.code(201).send({response: 'Post atualizado com sucesso'})
     } catch (error) {
         return reply.code(400).send({responde: `Erro ao atualizar o post: ${error}`})
     }
